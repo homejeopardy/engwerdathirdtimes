@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engwerda Studios</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom styles to complement Tailwind */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* A light gray background */
+        }
+        header {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom font for the main title */
+        .title-font {
+            font-family: 'Nanum Myeongjo', serif; /* A typewriter-like font */
+            font-weight: 800; /* Bold */
+        }
+        /* A subtle transition for hover effects */
+        .item, button, .video-card {
+            transition: all 0.2s ease-in-out;
+        }
+        /* Custom styles for the notification toast */
+        #notification {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        /* Add a little padding to the top of the body to prevent content from hiding behind the fixed header */
+        body {
+            padding-top: 100px;
+        }
+        .hero-banner {
+            background-image: url('images/engwerda-banner.jpg');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4); /* Dark overlay for text readability */
+            z-index: 1;
+        }
+        .hero-banner .relative {
+            position: relative;
+            z-index: 2; /* Ensure text is above overlay */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="fixed top-0 left-0 w-full bg-red-800 text-white p-6 text-center shadow-lg z-50">
+        <h1 class="text-4xl md:text-5xl font-bold title-font">Engwerda Studios</h1>
+        <nav class="mt-4">
+            <ul class="flex justify-center space-x-6">
+                <li><a href="#public-view" class="hover:text-red-200 transition-colors duration-200" onclick="showPublicView()">Home</a></li>
+                <li><a href="#projects-view" class="hover:text-red-200 transition-colors duration-200" onclick="showProjectsView()">Projects</a></li>
+                <li><a href="#blog-view" class="hover:text-red-200 transition-colors duration-200" onclick="showBlogView()">Blog</a></li>
+                <li><a href="#gallery-view" class="hover:text-red-200 transition-colors duration-200" onclick="showGalleryView()">Gallery</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8 max-w-4xl">
+        <div id="loading" class="text-center py-10 hidden">
+            <p class="text-lg text-gray-500">Loading Studio...</p>
+        </div>
+        
+        <div id="public-view" class="bg-white p-6 md:p-8 rounded-xl shadow-lg">
+            <div class="relative rounded-xl overflow-hidden mb-8 shadow-inner hero-banner">
+                <div class="relative p-12 text-center text-white">
+                    <h2 class="text-5xl md:text-6xl font-extrabold mb-2 leading-tight title-font">
+                        <span class="text-red-600">Engwerda</span> Studios
+                    </h2>
+                    <p class="text-xl md:text-2xl font-light">Making films, one frame at a time.</p>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h2 class="text-3xl font-bold text-red-800 mb-4 text-center">About Engwerda Studios</h2>
+                <p class="text-lg font-semibold mb-6 text-center">
+                    Engwerda Studios is a collaborative film project founded by Austin Engwerda. We craft compelling stories from script to screen with a focus on creative collaboration, detailed production planning, and passionate storytelling. Our work, brought to life with a dedicated cast and crew, showcases our commitment to high-quality independent filmmaking. We invite you to join our journey and connect with our community on YouTube.
+                </p>
+            </div>
+            
+            <h2 class="text-3xl font-bold text-red-800 mb-6 text-center">Latest Projects</h2>
+            <div id="latestProjectsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                </div>
+
+            <section class="bg-white p-6 md:p-8 rounded-xl shadow-lg mt-8">
+                <h2 class="text-3xl font-bold text-red-800 mb-6 text-center">Contact Us</h2>
+                <form action="https://formspree.io/f/xgvlkawr" method="POST" class="space-y-4">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                        <input type="text" id="name" name="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email Address</label>
+                        <input type="email" id="email" name="email" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+                        <textarea id="message" name="message" rows="4" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500"></textarea>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                            Send Message
+                        </button>
+                    </div>
+                </form>
+            </section>
+            
+            <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+                <button id="showLoginBtn" class="bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Log in to Engwerda Studios
+                </button>
+            </div>
+            
+            <div id="studio-team-view" class="bg-white p-6 md:p-8 rounded-xl shadow-lg mt-8">
+                <h2 class="text-3xl font-bold text-red-800 mb-6 text-center">Studio Team</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <div class="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
+                        <img src="images/austin.png" alt="Austin Engwerda" class="w-32 h-32 rounded-full object-cover mb-4">
+                        <h3 class="font-bold text-xl text-gray-700">Austin Engwerda</h3>
+                        <p class="text-gray-500">CEO, CFO, COO</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
+                        <img src="images/nathan.png" alt="Nathan Bennett-Crump" class="w-32 h-32 rounded-full object-cover mb-4">
+                        <h3 class="font-bold text-xl text-gray-700">Nathan Bennett-Crump</h3>
+                        <p class="text-gray-500">CMO, CAO</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
+                        <img src="images/b-c.png" alt="B-C Web" class="w-32 h-32 rounded-full object-cover mb-4">
+                        <h3 class="font-bold text-xl text-gray-700">B-C Web</h3>
+                        <p class="text-gray-500">Web Design Company</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cast-view" class="bg-white p-6 md:p-8 rounded-xl shadow-lg mt-8">
+                <h2 class="text-3xl font-bold text-red-800 mb-6 text-center">Cast and Crew of Bike Bandits</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                    <div class="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
+                        <img src="images/austin.png" alt="Austin Engwerda" class="w-32 h-32 rounded-full object-cover mb-4">
+                        <h3 class="font-bold text-xl text-gray-700">Austin Engwerda</h3>
+                        <p class="text-gray-500">Director, Executive Producer</p>
+                    </div>
+                     <div class="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
+                        <img src="images/es.png" alt="Douglas Alexander" class="w-32 h-32 rounded-full object-cover mb-4">
+                        <h3 class="font-bold text-xl text-gray-700">Douglas Alexander</h3>
+                        <p class="text-gray-500">Executive Producer</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
+                        <img src="images/nathan.png" alt="Nathan Bennett-Crump" class="w-32 h-32 rounded-full object-cover mb-4">
+                        <h3 class="font-bold text-xl text-gray-700">Nathan Bennett-Crump</h3>
+                        <p class="text-gray-500">Associate Producer, Marketing Director</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
+                        <img src="images/elias.png" alt="Elias Levy" class="w-32 h-32 rounded-full object-cover mb-4">
+                        <h3 class="font-bold text-xl text-gray-700">Elias Levy</h3>
+                        <p class="text-gray-500">Marc</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
+                        <img src="images/elliott.png" alt="Elliott Shaykin" class="w-32 h-32 rounded-full object-cover mb-4">
+                        <h3 class="font-bold text-xl text-gray-700">Elliott Shaykin</h3>
+                        <p class="text-gray-500">Danny</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
+                        <img src="images/hadley.png" alt="Hadley Perera" class="w-32 h-32 rounded-full object-cover mb-4">
+                        <h3 class="font-bold text-xl text-gray-700">Hadley Perera</h3>
+                        <p class="text-gray-500">Denice</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
+                        <img src="images/claire.png" alt="Claire Horton" class="w-32 h-32 rounded-full object-cover mb-4">
+                        <h3 class="font-bold text-xl text-gray-700">Claire Horton</h3>
+                        <p class="text-gray-500">Chalene</p>
+                    </div>
+                    <div class="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
+                        <img src="images/amelie.png" alt="Amelie Lo" class="w-32 h-32 rounded-full object-cover mb-4">
+                        <h3 class="font-bold text-xl text-gray-700">Amelie Lo</h3>
+                        <p class="text-gray-500">Lady</p>
+                    </div>
+                     <div class="flex flex-col items-center text-center p-4 bg-gray-100 rounded-lg shadow-md">
+                        <img src="images/es.png" alt="Spencer Engwerda" class="w-32 h-32 rounded-full object-cover mb-4">
+                        <h3 class="font-bold text-xl text-gray-700">Spencer Engwerda</h3>
+                        <p class="text-gray-500">BTS Filming</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+        <div id="projects-view" class="hidden bg-white p-6 md:p-8 rounded-xl shadow-lg">
+            <h2 class="text-3xl font-bold text-red-800 mb-6 text-center">Filmography</h2>
+            <div id="projectsContainer" class="space-y-8">
+                </div>
+            <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+                <button onclick="showPublicView()" class="bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Back to Home
+                </button>
+            </div>
+        </div>
+        
+        <div id="project-detail-view" class="hidden bg-white p-6 md:p-8 rounded-xl shadow-lg">
+            <h2 id="project-title" class="text-3xl font-bold text-red-800 mb-4 text-center"></h2>
+            <p id="project-description" class="text-lg text-gray-700 mb-6 text-center"></p>
+            <div class="flex justify-center items-center mb-6">
+                <iframe id="project-video-player" class="w-full aspect-video rounded-lg shadow-md" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+                <button onclick="showProjectsView()" class="bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Back to Filmography
+                </button>
+            </div>
+        </div>
+
+        <div id="bike-bandits-view" class="hidden bg-white p-6 md:p-8 rounded-xl shadow-lg">
+            <h2 class="text-3xl font-bold text-red-800 mb-6 text-center">Bike Bandits</h2>
+            <div class="flex flex-col items-center">
+                <img src="images/video_placehold.png" alt="Bike Bandits Video Placeholder" class="w-full max-w-xl rounded-lg shadow-md mb-8">
+                
+                <div id="videoLinksContainer" class="w-full max-w-xl space-y-4">
+                    <p class="text-center text-gray-500">Content for this section is coming soon!</p>
+                    </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+                <button onclick="showProjectsView()" class="bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Back to Projects
+                </button>
+            </div>
+        </div>
+        <div id="blog-view" class="hidden bg-white p-6 md:p-8 rounded-xl shadow-lg">
+            <h2 class="text-3xl font-bold text-red-800 mb-6 text-center">Studio Blog</h2>
+            <div id="blogContainer" class="flex flex-col items-center space-y-8">
+                <div class="flex justify-center items-center h-48">
+                    <div class="w-16 h-16 border-4 border-gray-200 border-t-red-600 rounded-full animate-spin"></div>
+                </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+                <button onclick="showPublicView()" class="bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Back to Home
+                </button>
+            </div>
+        </div>
+        
+        <div id="gallery-view" class="hidden bg-white p-6 md:p-8 rounded-xl shadow-lg">
+            <h2 class="text-3xl font-bold text-red-800 mb-6 text-center">Photo Gallery</h2>
+            <div id="galleryContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                </div>
+            <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+                <button onclick="showPublicView()" class="bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-md hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    Back to Home
+                </button>
+            </div>
+        </div>
+
+        <div id="login" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white p-8 rounded-xl shadow-md max-w-sm w-full">
+                <h2 class="text-2xl font-bold text-red-800 mb-6 text-center">Enter Password</h2>
+                <div class="space-y-4">
+                    <input type="password" id="password" placeholder="Password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:outline-none">
+                    <button id="loginButton" class="w-full bg-red-700 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                        Enter
+                    </button>
+                </div>
+                <button id="hideLoginBtn" class="mt-4 w-full bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400">Cancel</button>
+            </div>
+        </div>
+
+        <div id="content-view" class="hidden bg-white p-6 md:p-8 rounded-xl shadow-md">
+            <div id="breadcrumb" class="mb-4 text-gray-500"></div>
+            <div class="mb-4">
+                <input type="text" id="searchInput" placeholder="Search files..." class="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-red-500 focus:outline-none">
+            </div>
+
+            <div id="admin-controls" class="hidden mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <h3 class="text-xl font-semibold text-red-800 mb-4">Admin Panel</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <input type="text" id="folderName" placeholder="New Folder Name" class="w-full px-3 py-2 border rounded-md">
+                        <button id="addFolderBtn" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700">Add Folder</button>
+                    </div>
+                    <div class="space-y-2">
+                        <input type="text" id="linkName" placeholder="Link Name" class="w-full px-3 py-2 border rounded-md">
+                        <input type="text" id="linkURL" placeholder="Link URL" class="w-full px-3 py-2 border rounded-md">
+                        <button id="addLinkBtn" class="w-full bg-green-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-green-700">Add Link</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="fileArea" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                </div>
+            <p id="empty-folder-msg" class="hidden text-center text-gray-500 py-8">This folder is empty.</p>
+
+            <div class="mt-8 pt-6 border-t border-gray-200 flex items-center justify-between">
+                <button id="backButton" class="bg-gray-600 text-white font-bold py-2 px-5 rounded-lg hover:bg-gray-700 disabled:bg-gray-300 disabled:cursor-not-allowed">Back</button>
+                <button id="logoutButton" class="bg-red-700 text-white font-bold py-2 px-5 rounded-lg hover:bg-red-800">Logout</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="notification" class="fixed bottom-5 right-5 bg-gray-800 text-white px-6 py-3 rounded-lg shadow-xl translate-x-[120%] opacity-0">
+        <p id="notification-text"></p>
+    </div>
+
+    <div id="confirm-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
+            <h3 class="text-lg font-bold mb-4" id="confirm-modal-title">Are you sure?</h3>
+            <p id="confirm-modal-text" class="mb-6"></p>
+            <div class="flex justify-end space-x-4">
+                <button id="confirm-modal-cancel" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400">Cancel</button>
+                <button id="confirm-modal-confirm" class="bg-red-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-700">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- GLOBAL STATE & CONFIG ---
+
+        // The key used to track login status
+        const AUTH_KEY = 'engwerda-studio-auth';
+        // The key to store the file structure in localStorage
+        const DATA_KEY = 'engwerda-studio-data';
+
+        // Initial, default file structure if none exists in localStorage
+        const defaultFileStructure = {
+            name: "Home",
+            folders: [
+                {
+                    name: "Private",
+                    folders: [
+                        {
+                            name: "Bike Bandits",
+                            folders: [],
+                            links: [
+                                {
+                                    name: "Script",
+                                    url: "https://docs.google.com/document/d/1Q4dh3V8z6DUza9l331LyEPGyIy-qSbzd3ORSbtXCQhs/edit?tab=t.0"
+                                },
+                                {
+                                    name: "Shot List",
+                                    url: "https://docs.google.com/document/d/1X_BeJ45gtb0zVUEQFVsgdZscoiP7e_0ly3xWsU7Gmmk/edit?tab=t.0"
+                                },
+                                {
+                                    name: "Schedule",
+                                    url: "https://docs.google.com/document/d/1TA4FZHU0iQCPhZDHmvu3mhnSjYGSsywPVJpFWyC_0ZE/edit?tab=t.0"
+                                },
+                                {
+                                    name: "Props",
+                                    url: "https://docs.google.com/document/d/1IrQvtBGHxI8PvRzZ3BNE5Tv4mbqO4fhB3_d0RYR7pvo/edit?tab=t.0"
+                                },
+                                {
+                                    name: "Costumes",
+                                    url: "https://docs.google.com/document/d/1LTg4zOwkyLEB4dHSE_49WGNFELEY8NRK7xtDJm3eZpw/edit?tab=t.0"
+                                },
+                                {
+                                    name: "Marketing",
+                                    url: "https://docs.google.com/document/d/1x3-bH6vlgCi9phXOrsy9hGymUTeDGX20HzU6ofVGT9g/edit?tab=t.0"
+                                },
+                                {
+                                    name: "Cast Resources",
+                                    url: "https://docs.google.com/document/d/1M_d6HgmRIae6kCS54wItWdAuyPzwvVPoRG8XONd5R1g/edit?tab=t.0"
+                                },
+                                {
+                                    name: "Form",
+                                    url: "https://docs.google.com/forms/d/1zHXmQ8s17qJsDZb-mZ4w784DhJmNi1l0zglP6_UNIPA/edit#response=ACYDBNjiP1iZoccmphWNg2s2JuYKyPT07jhr3BsSCDRjBZ-ohbCgGssF0NN8cLUcXpkRW8A"
+                                }
+                            ]
+                        }
+                    ],
+                    links: []
+                }
+            ],
+            links: []
+        };
+        
+        // Global projects data for the new filmography page
+        const projects = [
+            {
+                title: "Bike Bandits",
+                year: 2025,
+                description: "A short film by Engwerda Studios. Made in 2025",
+                youtubeUrl: "https://www.youtube.com/watch?v=SgeZxKeISws",
+                viewId: "bike-bandits-view",
+                thumbnail: "https://img.youtube.com/vi/SgeZxKeISws/maxresdefault.jpg"
+            },
+            {
+                title: "MCR: A Short Film",
+                year: 2025,
+                description: "A thrilling short film exploring a tense standoff. Made in 2025.",
+                youtubeUrl: "https://youtu.be/kSL0ma11K5A",
+                youtubeId: "kSL0ma11K5A",
+                thumbnail: "https://i.ytimg.com/vi/kSL0ma11K5A/mqdefault.jpg"
+            },
+            {
+                title: "Top Gun (Clean Version)",
+                year: 2025,
+                description: "A fun parody of the classic film, recut for a family-friendly audience.",
+                youtubeUrl: "https://youtu.be/MURjoBiJ1BI",
+                youtubeId: "MURjoBiJ1BI",
+                thumbnail: "https://i.ytimg.com/vi/MURjoBiJ1BI/mqdefault.jpg"
+            },
+            {
+                title: "Foux Da Fa Fa",
+                year: 2025,
+                description: "A comedic tribute to the TV show 'Flight of the Conchords.'",
+                youtubeUrl: "https://youtu.be/pyz3HLDYdRE",
+                youtubeId: "pyz3HLDYdRE",
+                thumbnail: "https://i.ytimg.com/vi/pyz3HLDYdRE/mqdefault.jpg"
+            },
+            {
+                title: "Time Portal 2",
+                year: 2024,
+                description: "The highly anticipated sequel to the original.",
+                youtubeUrl: "https://www.youtube.com/watch?v=aSm6JbGi3Io&t=8s",
+                youtubeId: "aSm6JbGi3Io",
+                thumbnail: "https://i.ytimg.com/vi/aSm6JbGi3Io/mqdefault.jpg"
+            },
+            {
+                title: "Time Portal",
+                year: 2023,
+                description: "A thrilling sci-fi adventure.",
+                youtubeUrl: "https://www.youtube.com/watch?v=1ATgNuUh-fg&t=10s",
+                youtubeId: "1ATgNuUh-fg",
+                thumbnail: "https://i.ytimg.com/vi/1ATgNuUh-fg/mqdefault.jpg"
+            }
+        ];
+
+        let fileStructure = {};
+        let currentPath = []; // An array of indices to navigate the structure
+        let isAdmin = false;
+        
+        // --- Define DOMElements in the global scope ---
+        let DOMElements = {};
+        
+        // --- VIEW MANAGEMENT & AUTHENTICATION ---
+        
+        function showView(viewId) {
+            const views = ['public-view', 'blog-view', 'login', 'content-view', 'gallery-view', 'projects-view', 'bike-bandits-view', 'project-detail-view'];
+            views.forEach(id => {
+                const viewElement = document.getElementById(id);
+                if (viewElement) {
+                    if (id === viewId) {
+                        viewElement.classList.remove('hidden');
+                    } else {
+                        viewElement.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        function showPublicView() {
+            showView('public-view');
+            renderLatestProjects();
+        }
+
+        function showBlogView() {
+            showView('blog-view');
+            renderBlog();
+        }
+        
+        function showGalleryView() {
+            showView('gallery-view');
+            renderGallery();
+        }
+        
+        function showProjectsView() {
+            showView('projects-view');
+            renderProjectsToContainer('projectsContainer');
+        }
+
+        function showProjectDetails(project) {
+            document.getElementById('project-title').textContent = project.title;
+            document.getElementById('project-description').textContent = project.description;
+            const videoUrl = `https://www.youtube.com/embed/${project.youtubeId}?autoplay=1&rel=0`;
+            document.getElementById('project-video-player').src = videoUrl;
+            showView('project-detail-view');
+        }
+
+        function showLoginModal() {
+            showView('login');
+        }
+
+        function hideLoginModal() {
+            DOMElements.loginView.classList.add('hidden');
+        }
+
+        function handleLogin() {
+            const pw = DOMElements.passwordInput.value;
+            DOMElements.passwordInput.value = '';
+
+            if (pw === "Austin") {
+                isAdmin = false;
+                localStorage.setItem(AUTH_KEY, "user");
+                showContentView();
+            } else if (pw === "Admin") {
+                isAdmin = true;
+            localStorage.setItem(AUTH_KEY, "admin");
+                showContentView();
+            } else {
+                showNotification("Wrong password. Please try again.", "error");
+            }
+        }
+
+        function showContentView() {
+            showView('content-view');
+            DOMElements.adminControls.style.display = isAdmin ? 'block' : 'none';
+            const privateFolderIndex = fileStructure.folders.findIndex(f => f.name === 'Private');
+            if (privateFolderIndex !== -1) {
+                currentPath = [privateFolderIndex];
+            } else {
+                currentPath = [];
+            }
+            render();
+        }
+
+        function handleGoBack() {
+            if (currentPath.length > 0) {
+                currentPath.pop();
+                render();
+            }
+        }
+
+        function handleLogout() {
+            currentPath = [];
+            isAdmin = false;
+            localStorage.removeItem(AUTH_KEY);
+            showPublicView();
+        }
+
+        // --- DATA MANAGEMENT (localStorage) ---
+
+        function loadStructure() {
+            const storedData = localStorage.getItem(DATA_KEY);
+            if (storedData) {
+                fileStructure = JSON.parse(storedData);
+            } else {
+                fileStructure = defaultFileStructure;
+                saveStructure();
+            }
+        }
+
+        function saveStructure() {
+            localStorage.setItem(DATA_KEY, JSON.stringify(fileStructure));
+        }
+        
+        // --- RENDERING LOGIC ---
+        
+        function render() {
+            const currentFolder = getCurrentFolder();
+            if (!currentFolder) {
+                console.error("Could not find current folder at path:", currentPath);
+                currentPath = [];
+                render();
+                return;
+            }
+            
+            renderBreadcrumb();
+            DOMElements.fileArea.innerHTML = '';
+            
+            const searchTerm = DOMElements.searchInput.value.toLowerCase();
+
+            // Filter items based on the search term
+            const filteredFolders = (currentFolder.folders || []).filter(item => 
+                item.name.toLowerCase().includes(searchTerm)
+            );
+            const filteredLinks = (currentFolder.links || []).filter(item => 
+                item.name.toLowerCase().includes(searchTerm)
+            );
+
+            const items = [...filteredFolders, ...filteredLinks];
+            DOMElements.emptyFolderMsg.style.display = items.length === 0 ? 'block' : 'none';
+
+            filteredFolders.forEach((folder, index) => {
+                DOMElements.fileArea.appendChild(createItemElement(folder, 'folder', index));
+            });
+
+            filteredLinks.forEach((link, index) => {
+                DOMElements.fileArea.appendChild(createItemElement(link, 'link', index));
+            });
+
+            DOMElements.backButton.disabled = currentPath.length === 0;
+        }
+
+        function renderProjectsToContainer(containerId, limit = null) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = ''; // Clear existing content
+
+            const projectsToRender = limit ? projects.slice(0, limit) : projects;
+
+            projectsToRender.forEach(project => {
+                const isLatest = containerId === 'latestProjectsContainer';
+                let linkHref = project.youtubeUrl ? project.youtubeUrl : `#${project.viewId}`;
+                let clickHandler = '';
+                let linkTarget = '_self'; // Default to a new page
+                
+                if (project.viewId) {
+                    clickHandler = `showView('${project.viewId}')`;
+                    linkTarget = '_self';
+                } else if (project.youtubeId) {
+                    clickHandler = `showProjectDetails(projects.find(p => p.youtubeId === '${project.youtubeId}'))`;
+                    linkTarget = '_self';
+                    linkHref = '#';
+                } else if (project.youtubeUrl) {
+                    linkTarget = '_blank';
+                }
+
+                
+                // This is the HTML structure for a single project card
+                const projectCardHtml = `
+                    <a href="${linkHref}" onclick="${clickHandler}" target="${linkTarget}" class="block group">
+                        <div class="video-card rounded-lg overflow-hidden shadow-lg transform group-hover:scale-105 transition-transform duration-300">
+                            <img src="${project.thumbnail}" alt="${project.title} thumbnail" class="w-full h-auto object-cover">
+                        </div>
+                        <p class="text-center font-semibold mt-2 group-hover:text-red-800">${project.title}</p>
+                    </a>
+                `;
+                
+                // Use a different structure for the main projects page for more detail
+                const detailedCardHtml = `
+                    <div class="flex flex-col md:flex-row bg-gray-100 p-4 rounded-lg shadow-md hover:bg-gray-200 transition-colors duration-200">
+                        <a href="${linkHref}" onclick="${clickHandler}" target="${linkTarget}" class="block md:w-1/3 flex-shrink-0">
+                            <img src="${project.thumbnail}" alt="${project.title} thumbnail" class="w-full rounded-lg shadow-sm">
+                        </a>
+                        <div class="md:ml-6 mt-4 md:mt-0 flex-grow">
+                            <h3 class="text-2xl font-bold text-red-800 mb-2">${project.title} <span class="font-normal text-lg text-gray-500">(${project.year})</span></h3>
+                            <p class="text-gray-700">${project.description}</p>
+                            <div class="mt-4">
+                                <a href="${linkHref}" onclick="${clickHandler}" target="${linkTarget}" class="inline-block bg-red-700 text-white font-bold py-2 px-6 rounded-lg hover:bg-red-800">
+                                    Watch Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML += isLatest ? projectCardHtml : detailedCardHtml;
+            });
+        }
+        
+        function renderLatestProjects() {
+            renderProjectsToContainer('latestProjectsContainer', 3);
+        }
+
+        async function renderBlog() {
+            const blogContainer = document.getElementById('blogContainer');
+            blogContainer.innerHTML = `
+                <div class="flex justify-center items-center h-48">
+                    <div class="w-16 h-16 border-4 border-gray-200 border-t-red-600 rounded-full animate-spin"></div>
+                </div>
+            `;
+            
+            let imagesLoaded = false;
+            let imageCounter = 1;
+            const fileExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+
+            for (const ext of fileExtensions) {
+                while (true) {
+                    const imageUrl = `blog/${imageCounter}.${ext}`;
+                    try {
+                        const response = await fetch(imageUrl, { method: 'HEAD' });
+                        if (response.ok) {
+                            if (!imagesLoaded) {
+                                blogContainer.innerHTML = '';
+                                imagesLoaded = true;
+                            }
+                            const imgElement = document.createElement('img');
+                            imgElement.src = imageUrl;
+                            imgElement.alt = `Blog post image ${imageCounter}`;
+                            imgElement.className = 'w-full mb-6 rounded-lg shadow-md';
+                            blogContainer.appendChild(imgElement);
+                            imageCounter++;
+                        } else {
+                            break;
+                        }
+                    } catch (error) {
+                        break;
+                    }
+                }
+                if (imagesLoaded) break;
+            }
+
+            if (!imagesLoaded) {
+                blogContainer.innerHTML = `<p class="text-center text-gray-500 py-8">No blog posts found yet. Check back soon!</p>`;
+            }
+        }
+        
+        async function renderGallery() {
+            const galleryContainer = document.getElementById('galleryContainer');
+            galleryContainer.innerHTML = ''; // Clear previous content
+
+            const galleryPath = 'gallery/bike-bandits/';
+            let imageCounter = 1;
+            const fileExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+            let imagesLoaded = false;
+
+            for (const ext of fileExtensions) {
+                while (true) {
+                    const imageUrl = `${galleryPath}${imageCounter}.${ext}`;
+                    try {
+                        const response = await fetch(imageUrl, { method: 'HEAD' });
+                        if (response.ok) {
+                            imagesLoaded = true;
+                            const imgElement = document.createElement('img');
+                            imgElement.src = imageUrl;
+                            imgElement.alt = `Gallery image ${imageCounter}`;
+                            imgElement.className = 'w-full h-auto rounded-lg shadow-md cursor-pointer hover:scale-105 transition-transform duration-200';
+                            galleryContainer.appendChild(imgElement);
+                            imageCounter++;
+                        } else {
+                            break;
+                        }
+                    } catch (error) {
+                        break;
+                    }
+                }
+            }
+
+            if (!imagesLoaded) {
+                galleryContainer.innerHTML = `<p class="text-center text-gray-500 py-8 col-span-full">No photos found yet. Check back soon!</p>`;
+            }
+        }
+
+        function createItemElement(item, type, index) {
+            const isFolder = type === 'folder';
+            const wrapper = document.createElement('div');
+            wrapper.className = 'item relative group flex flex-col items-center justify-center p-4 border-2 border-gray-200 rounded-lg text-center cursor-pointer hover:border-red-500 hover:bg-red-50';
+
+            const icon = isFolder
+                ? `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" /></svg>`
+                : `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-2 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>`;
+            
+            wrapper.innerHTML = `
+                ${icon}
+                <span class="break-words w-full font-semibold text-gray-700">${item.name}</span>
+            `;
+
+            wrapper.addEventListener('click', () => {
+                if (isFolder) {
+                    currentPath.push(index);
+                    render();
+                } else {
+                    window.open(item.url, "_blank");
+                }
+            });
+
+            if (isAdmin) {
+                const deleteBtn = document.createElement('button');
+            deleteBtn.innerHTML = `&times;`;
+            deleteBtn.className = 'absolute top-1 right-1 h-6 w-6 bg-red-500 text-white rounded-full flex items-center justify-center font-bold opacity-0 group-hover:opacity-100 hover:bg-red-700';
+            deleteBtn.onclick = (e) => {
+                e.stopPropagation();
+                handleDeleteItem(type, index);
+            };
+            wrapper.appendChild(deleteBtn);
+            }
+            return wrapper;
+        }
+
+        function renderBreadcrumb() {
+            DOMElements.breadcrumb.innerHTML = '';
+            let path = fileStructure;
+            
+            const homeLink = document.createElement('span');
+            homeLink.textContent = 'Home';
+            homeLink.className = 'cursor-pointer hover:underline';
+            homeLink.onclick = () => { currentPath = []; render(); };
+            DOMElements.breadcrumb.appendChild(homeLink);
+
+            currentPath.forEach((folderIndex, pathIndex) => {
+                if (path && path.folders && path.folders[folderIndex]) {
+                    path = path.folders[folderIndex];
+                    const separator = document.createElement('span');
+                    separator.textContent = ' / ';
+                    separator.className = 'mx-1';
+                    DOMElements.breadcrumb.appendChild(separator);
+
+                    const pathLink = document.createElement('span');
+                    pathLink.textContent = path.name;
+                    pathLink.className = 'cursor-pointer hover:underline';
+                    pathLink.onclick = () => {
+                        currentPath = currentPath.slice(0, pathIndex + 1);
+                        render();
+                    };
+                    DOMElements.breadcrumb.appendChild(pathLink);
+                }
+            });
+        }
+        
+        // --- EVENT HANDLERS & ACTIONS ---
+        
+        function handleAddFolder() {
+            const name = DOMElements.folderNameInput.value.trim();
+            if (!name) {
+                showNotification("Please enter a folder name.", "error");
+                return;
+            }
+            const currentFolder = getCurrentFolder();
+            if (!currentFolder.folders) currentFolder.folders = [];
+            currentFolder.folders.push({ name: name, folders: [], links: [] });
+            DOMElements.folderNameInput.value = "";
+            saveStructure();
+            render();
+            showNotification(`Folder "${name}" added.`, "success");
+        }
+
+        function handleAddLink() {
+            const name = DOMElements.linkNameInput.value.trim();
+            const url = DOMElements.linkURLInput.value.trim();
+            if (!name || !url) {
+                showNotification("Please enter both a name and a URL.", "error");
+                return;
+            }
+            const currentFolder = getCurrentFolder();
+            if (!currentFolder.links) currentFolder.links = [];
+            currentFolder.links.push({ name: name, url: url });
+            DOMElements.linkNameInput.value = "";
+            DOMElements.linkURLInput.value = "";
+            saveStructure();
+            render();
+            showNotification(`Link "${name}" added.`, "success");
+        }
+        
+        async function handleDeleteItem(type, index) {
+            const currentFolder = getCurrentFolder();
+            const itemArray = type === 'folder' ? currentFolder.folders : currentFolder.links;
+            const itemName = itemArray[index].name;
+
+            const confirmed = await showConfirm(`Are you sure you want to delete "${itemName}"?`);
+            if (confirmed) {
+                itemArray.splice(index, 1);
+                saveStructure();
+                render();
+                showNotification(`"${itemName}" was deleted.`, "success");
+            }
+        }
+
+        // --- UTILITY FUNCTIONS ---
+        
+        function getCurrentFolder() {
+            let current = fileStructure;
+            for (const index of currentPath) {
+                if (current && current.folders && current.folders[index]) {
+                    current = current.folders[index];
+                } else {
+                    return null;
+                }
+            }
+            return current;
+        }
+
+        function showNotification(message, type = 'success') {
+            DOMElements.notificationText.textContent = message;
+            const notification = DOMElements.notification;
+            notification.className = `fixed bottom-5 right-5 text-white px-6 py-3 rounded-lg shadow-xl translate-x-[120%] opacity-0 ${type === 'error' ? 'bg-red-600' : 'bg-gray-800'}`;
+            
+            setTimeout(() => {
+                notification.classList.remove('translate-x-[120%]', 'opacity-0');
+                notification.classList.add('translate-x-0', 'opacity-100');
+            }, 10);
+
+            setTimeout(() => {
+                notification.classList.remove('translate-x-0', 'opacity-100');
+                notification.classList.add('translate-x-[120%]', 'opacity-0');
+            }, 3000);
+        }
+
+        function showConfirm(text) {
+            return new Promise((resolve) => {
+                DOMElements.confirmModalText.textContent = text;
+                DOMElements.confirmModal.classList.remove('hidden');
+
+                const cancelHandler = () => {
+                    DOMElements.confirmModal.classList.add('hidden');
+                    DOMElements.confirmModalConfirm.removeEventListener('click', confirmHandler);
+                    DOMElements.confirmModalCancel.removeEventListener('click', cancelHandler);
+                    resolve(false);
+                };
+
+                const confirmHandler = () => {
+                    DOMElements.confirmModal.classList.add('hidden');
+                    DOMElements.confirmModalConfirm.removeEventListener('click', confirmHandler);
+                    DOMElements.confirmModalCancel.removeEventListener('click', cancelHandler);
+                    resolve(true);
+                };
+
+                DOMElements.confirmModalCancel.addEventListener('click', cancelHandler, { once: true });
+                DOMElements.confirmModalConfirm.addEventListener('click', confirmHandler, { once: true });
+            });
+        }
+        
+        // This function encapsulates all the initial setup and event listener attachments.
+        function initializeApp() {
+            // Assign elements to the globally declared DOMElements object
+            DOMElements.loading = document.getElementById('loading');
+            DOMElements.publicView = document.getElementById('public-view');
+            DOMElements.blogView = document.getElementById('blog-view');
+            DOMElements.projectsView = document.getElementById('projects-view');
+            DOMElements.galleryView = document.getElementById('gallery-view');
+            DOMElements.showLoginBtn = document.getElementById('showLoginBtn');
+            DOMElements.hideLoginBtn = document.getElementById('hideLoginBtn');
+            DOMElements.loginView = document.getElementById('login');
+            DOMElements.contentView = document.getElementById('content-view');
+            DOMElements.passwordInput = document.getElementById('password');
+            DOMElements.loginButton = document.getElementById('loginButton');
+            DOMElements.adminControls = document.getElementById('admin-controls');
+            DOMElements.fileArea = document.getElementById('fileArea');
+            DOMElements.breadcrumb = document.getElementById('breadcrumb');
+            DOMElements.backButton = document.getElementById('backButton');
+            DOMElements.logoutButton = document.getElementById('logoutButton');
+            DOMElements.addFolderBtn = document.getElementById('addFolderBtn');
+            DOMElements.addLinkBtn = document.getElementById('addLinkBtn');
+            DOMElements.folderNameInput = document.getElementById('folderName');
+            DOMElements.linkNameInput = document.getElementById('linkName');
+            DOMElements.linkURLInput = document.getElementById('linkURL');
+            DOMElements.notification = document.getElementById('notification');
+            DOMElements.notificationText = document.getElementById('notification-text');
+            DOMElements.emptyFolderMsg = document.getElementById('empty-folder-msg');
+            DOMElements.confirmModal = document.getElementById('confirm-modal');
+            DOMElements.confirmModalText = document.getElementById('confirm-modal-text');
+            DOMElements.confirmModalCancel = document.getElementById('confirm-modal-cancel');
+            DOMElements.confirmModalConfirm = document.getElementById('confirm-modal-confirm');
+            DOMElements.searchInput = document.getElementById('searchInput');
+
+            // Event Listeners
+            DOMElements.showLoginBtn.addEventListener('click', showLoginModal);
+            DOMElements.hideLoginBtn.addEventListener('click', hideLoginModal);
+            DOMElements.loginButton.addEventListener('click', handleLogin);
+            DOMElements.passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleLogin();
+            });
+            if (DOMElements.addFolderBtn) DOMElements.addFolderBtn.addEventListener('click', handleAddFolder);
+            if (DOMElements.addLinkBtn) DOMElements.addLinkBtn.addEventListener('click', handleAddLink);
+            if (DOMElements.backButton) DOMElements.backButton.addEventListener('click', handleGoBack);
+            if (DOMElements.logoutButton) DOMElements.logoutButton.addEventListener('click', handleLogout);
+            DOMElements.searchInput.addEventListener('input', render);
+
+            // Initial app state setup
+            loadStructure();
+            renderLatestProjects();
+            const loggedInAs = localStorage.getItem(AUTH_KEY);
+            if (loggedInAs === "admin") {
+                isAdmin = true;
+                showContentView();
+            } else if (loggedInAs === "user") {
+                isAdmin = false;
+                showContentView();
+            } else {
+                showPublicView();
+            }
+        }
+        
+        // --- Call initializeApp when the DOM is ready ---
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+    </script>
+</body>
+</html>
